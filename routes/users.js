@@ -50,7 +50,7 @@ router.post('/authenticate', (req, res, next) => {
                         username: user.username,
                         email: user.email
                     }
-                })
+                });
             } else {
                 return res.json({success: false, msg:'Wrong password'});
             }
@@ -59,8 +59,9 @@ router.post('/authenticate', (req, res, next) => {
 });
 
 //Profile
-router.get('/profile', (req, res, next) => {
-    res.send('Profile');
+// Profile
+router.get('/profile', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+    res.json({user: req.user});
 });
 
 
