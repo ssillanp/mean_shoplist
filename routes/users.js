@@ -3,7 +3,6 @@ const router = express.Router();
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/database')
-
 const User = require('../models/user')
 
 //Register
@@ -51,7 +50,7 @@ router.post('/authenticate', (req, res, next) => {
                         username: user.username,
                         email: user.email
                     }
-                });
+                })
             } else {
                 return res.json({success: false, msg:'Wrong password'});
             }

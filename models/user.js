@@ -29,7 +29,7 @@ module.exports.getUserById = (id, callback) => {
 
 module.exports.getUserByUserName = (username, callback) => {
     const query = {username:username}
-    User.findOne(query)
+    User.findOne(query, callback)
 }
 
 module.exports.addUser = (newUser, callback) => {
