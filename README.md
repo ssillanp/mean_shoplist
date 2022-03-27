@@ -5,4 +5,5 @@ A shopping list webapp, utilizing MEAN Stack
 @Author Sami Sillanpää
 2022
 
+Branch for backend only dev
 
