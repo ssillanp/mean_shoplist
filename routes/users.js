@@ -4,6 +4,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/database')
 const User = require('../models/user')
+const Lists = require('../models/shoplist');
 
 //Register
 router.post('/register', (req, res, next) => {
@@ -58,11 +59,52 @@ router.post('/authenticate', (req, res, next) => {
     });
 });
 
-//Profile
-// Profile
-router.get('/profile', passport.authenticate('jwt', {session:false}), (req, res, next) => {
-    res.json({user: req.user});
+
+// Lists
+router.get('/lists', passport.authenticate('jwt', {session:false}), (
+    req, res, next) => {
+    const uid = jwt.decode(req.headers.authorization.substring(4, req.headers.authorization.length), config.secret).data._id
+    Lists.getListByUserId(uid, (err, lists) => {
+        if(err){
+            res.json({success: false, msg: err})
+        } else {
+            res.json({success:true, lists: lists})
+        }
+    })
 });
+
+// Add list
+router.post('/lists/add', passport.authenticate('jwt', {session:false}),
+    (req, res, next) => {
+    let newList = new Lists({
+        name: req.body.name,
+        userId: jwt.decode(req.headers.authorization.substring(4, req.headers.authorization.length), config.secret).data._id,
+        items: req.body.items
+    });
+    Lists.addList(newList, (err, list) => {
+        if(err){
+            res.json({success: false, msg:'Failed to add list' + err})
+        } else {
+            res.json({success: true, msg: 'list added'})
+        }
+    });
+
+});
+
+//Update list
+router.post('/lists/update', passport.authenticate('jwt', {session:false}),
+    (req, res, next) => {
+    Lists.updateOne(req.body, (err, list) => {
+        if(err){
+            res.json({success: false, msg:'Failed to add list' + err})
+        } else {
+            res.json({success: true, msg: 'list updated'})
+        }
+    });
+
+});
+
+
 
 
 module.exports = router;
