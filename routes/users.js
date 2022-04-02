@@ -83,7 +83,7 @@ router.post('/lists/add', passport.authenticate('jwt', {session:false}),
     });
     Lists.addList(newList, (err, list) => {
         if(err){
-            res.json({success: false, msg:'Failed to add list' + err})
+            res.json({success: false, msg:'Failed to add list'})
         } else {
             res.json({success: true, msg: 'list added'})
         }
@@ -94,13 +94,21 @@ router.post('/lists/add', passport.authenticate('jwt', {session:false}),
 //Update list
 router.post('/lists/update', passport.authenticate('jwt', {session:false}),
     (req, res, next) => {
-    Lists.updateOne(req.body, (err, list) => {
-        if(err){
-            res.json({success: false, msg:'Failed to add list' + err})
-        } else {
-            res.json({success: true, msg: 'list updated'})
-        }
-    });
+    //Check that item updated belongs to authenticated user
+    if(req.body.userId === jwt
+        .decode(req.headers.authorization.substring(4, req.headers.authorization.length),config.secret)
+        .data
+        ._id){
+        Lists.updateOne(req.body, (err, list) => {
+            if(err){
+                res.json({success: false, msg:'Failed to update list'})
+            } else {
+                res.json({success: true, msg: 'list updated'})
+            }
+        });
+    } else {
+        res.json({success: false, msg:'Failed to update list'})
+    }
 
 });
 
