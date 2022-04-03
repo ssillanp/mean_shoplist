@@ -18,7 +18,7 @@ import {FlashMessagesModule} from "angular2-flash-messages";
 import {AuthGuard} from "./guards/auth.guard";
 
 const appRoutes: Routes =  [
-  {path:'', component: HomeComponent},
+  {path:'', component: LoginComponent},
   {path:'register', component: RegisterComponent},
   {path:'login', component: LoginComponent},
   {path:'dashboard', component: DashboardComponent, canActivate:[AuthGuard]},

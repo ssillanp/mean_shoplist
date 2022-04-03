@@ -9,6 +9,7 @@ import {FlashMessagesService} from "angular2-flash-messages";
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
+  headerText: String = "Login";
 
   constructor(
     private authService:AuthService,
